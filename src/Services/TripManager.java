@@ -5,7 +5,6 @@ import Objects.Rider;
 
 public class TripManager {
     public static TripManager tripManager;
-    DriverManagementSystem driverManagementSystem;
     RiderManagementSystem riderManagementSystem;
 
     DriverMatchingStrategy driverMatchingStrategy;
@@ -17,7 +16,6 @@ public class TripManager {
         return tripManager;
     }
     private TripManager(DriverMatchingStrategy driverMatchingStrategy, PricingStrategy pricingStrategy) {
-        driverManagementSystem = DriverManagementSystem.getInstance();
         riderManagementSystem = RiderManagementSystem.getInstance();
 
         this.driverMatchingStrategy = driverMatchingStrategy;
@@ -33,6 +31,9 @@ public class TripManager {
     }
 
     public void createTrip(Rider rider) {
+        if(!riderManagementSystem.riders.containsKey(rider.getId())) {
+            System.out.println("This Rider does not exist in our database");
+        }
         Driver driver = driverMatchingStrategy.matchDriver(rider);
         System.out.println("Driver Name: " + driver.getName() + " is allocated for your ride "); 
         Integer price = pricingStrategy.calculatePrice(rider, driver);
